@@ -1,5 +1,5 @@
 # Encryption-With-Self-Decryptor
-This Program Let you Encrypt a file or folder and attack a decryptor to the encrypted file/folder.
+This Program Let you Encrypt a file or folder and attach a decryptor to the encrypted file/folder.
 
 
 **Example:**
