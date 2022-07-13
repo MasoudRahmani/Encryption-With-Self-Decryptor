@@ -1,0 +1,186 @@
+﻿<mah:MetroWindow    x:Class="Encryptor.View.MainWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:local="clr-namespace:Encryptor"
+                    xmlns:View="clr-namespace:Encryptor.View"
+                    FlowDirection="LeftToRight"
+                    mc:Ignorable="d"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+                    Title="Encryptor" Height="510" Width="345"
+                    MinHeight="231" MinWidth="340"
+                    DataContext="{Binding Source={StaticResource Locator},Path=MainViewModel}"
+                    xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                    Dialog:DialogParticipation.Register="{Binding}"
+                    >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing" >
+            <cmd:EventToCommand Command="{Binding OnClosingCommand}"
+                                PassEventArgsToCommand="True" />
+
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <mah:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Encryptor;component/Resources/BootstrapButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Encryptor;component/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="mah:MetroProgressBar" x:Key="MetroVisibility">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=ProgressBar,Path=IsIndeterminate}" Value="True" >
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=ProgressBar,Path=IsIndeterminate}" Value="False" >
+                        <Setter Property="Visibility" Value="Hidden" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!--#region Source File Status-->
+            <VisualBrush x:Key="warning" Visual="{StaticResource appbar_warning_circle}" />
+            <VisualBrush x:Key="Success" Visual="{StaticResource appbar_thumbs_up}" />
+            <Style x:Key="SourceFileStatus" TargetType="Rectangle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsSourceFound}" Value="False">
+                        <Setter Property="Fill" Value="{StaticResource warning}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsSourceFound}" Value="True">
+                        <Setter Property="Fill" Value="{StaticResource Success}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <!--#endregion-->
+
+            <Style x:Key="SearchDest" TargetType="TextBox" BasedOn="{StaticResource SearchMetroTextBox}"/>
+
+            <!--<Style TargetType="ComboBox" x:Key="CompressOption">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=inMemory,Path=IsChecked}" Value="True">
+                        <Setter Property="ItemsSource" Value="{Binding StreamBasedCompressions}" />
+                    </DataTrigger>
+                    <DataTrigger  Binding="{Binding ElementName=inMemory,Path=IsChecked}" Value="False">
+                        <Setter Property="ItemsSource" Value="{Binding StreamBasedCompressions}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>-->
+        </ResourceDictionary>
+    </mah:MetroWindow.Resources>
+
+    <Grid IsEnabled="{Binding IsGridEnabled}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+
+
+        <GroupBox Header="Choose Source ..." Padding="10" BorderThickness="0" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="2" HorizontalAlignment="Center">
+                    <RadioButton Content="Folder" Margin="5" IsChecked="{Binding IsSourceDir}"/>
+                    <RadioButton Margin="5" ToolTip="Only files can be Multi Selected! NO Multi FOLDER SELECTION!!">
+                        <RadioButton.Content>
+                            <TextBlock Text="File?"  FontStyle="Italic"/>
+                        </RadioButton.Content>
+                    </RadioButton>
+                </StackPanel>
+
+                <Button HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="70" MaxHeight="50" 
+                        Content="Search..."  Grid.Column="1"
+                        Style="{StaticResource btn-primary}" Command="{Binding SearchSourceCommand}"/>
+
+                <Rectangle Width="32" Height="32" Margin="2" HorizontalAlignment="Center" Grid.Column="2"
+                           Style="{StaticResource SourceFileStatus}">
+                </Rectangle>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Choose Destination ..." Padding="10" BorderThickness="0" Grid.Row="1">
+            <Grid>
+                <TextBox 
+                    Style="{StaticResource SearchDest}"
+                    mah:TextBoxHelper.UseFloatingWatermark="True"
+                    mah:TextBoxHelper.ButtonCommand="{Binding SearchDestinationCommand}"
+                    Text="{Binding SAVETO,ValidatesOnDataErrors=True}"
+                    x:Name="adressgetter"
+                    mah:TextBoxHelper.IsWaitingForData="True">
+                    <mah:TextBoxHelper.Watermark>
+                        <MultiBinding StringFormat=" {0} {1}">
+                            <Binding Path="Default_TXT"/>
+                            <Binding Path="SAVETO"/>
+                        </MultiBinding>
+                    </mah:TextBoxHelper.Watermark>
+                </TextBox>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Settings" Grid.Row="2" >
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" FlowDirection="LeftToRight" Margin="2">
+                        
+                        <Label Content="Compression Level: " />
+                        <ComboBox x:Name="CompressionLevel" Margin="5,0"
+                              ItemsSource="{Binding StreamBasedCompressions}"
+                              SelectedItem="{Binding SelectedCompressOption}"/>
+                        
+                        <Label Content="Silent" FontStyle="Italic" ToolTip="It would skip ERROR without Showing !!"/>
+                        <CheckBox IsChecked="{Binding Quiet}" />
+                    </WrapPanel>
+
+                    <WrapPanel Grid.Row="1" VerticalAlignment="Center">
+                        <PasswordBox 
+                                 mah:PasswordBoxHelper.CapsLockWarningToolTip="CapsLock is ON !"  Margin="5,0"
+                                 MinWidth="90" x:Name="PasswordBox"
+                                 mah:TextBoxHelper.Watermark="Password"
+                                 mah:TextBoxHelper.UseFloatingWatermark="True"/>
+
+                        <Label VerticalContentAlignment="Center"
+                               ToolTip="If selected, it would show the list before prompting for Password !!">
+                            <Label.Content>
+                                <Underline>
+                                    <TextBlock FontStyle="Italic" Text="Content List!" />
+                                    <!--<TextBlock FontStyle="Italic" Text="نمایش محتوا بدون رمز؟" TextDecorations="UnderLine"/>-->
+                                </Underline>
+                            </Label.Content>
+                        </Label>
+                        <CheckBox IsChecked="{Binding ShowListFirst}" />
+
+                        <Label Content="In Memory?"  ToolTip="Encryption and Compression Will be done in Memory! Attention To Free Memory is advised !!!!"/>
+                        <mah:ToggleSwitchButton x:Name="inMemory" IsChecked="{Binding InMemory}" FlowDirection="LeftToRight" Height="30" Width="50"/>
+                    </WrapPanel>
+                </Grid>
+            </ScrollViewer>
+        </GroupBox>
+
+        <StackPanel Grid.Row="3" Margin="5" >
+            <Button Style="{StaticResource btn-success}"  Content="START"
+                    Command="{Binding StartCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+
+            <TextBlock HorizontalAlignment="Left" FlowDirection="LeftToRight" Text="{Binding STATUS}" Margin="5"/>
+
+            <mah:MetroProgressBar HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" MinWidth="150" Width="320"
+                                  Minimum="0" Maximum="250" x:Name="ProgressBar" Style="{StaticResource MetroVisibility}"
+                                  IsIndeterminate="{Binding ProgressValue}"/>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

@@ -1,0 +1,138 @@
+﻿<Window x:Class="Decryptor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Decryptor"
+        mc:Ignorable="d" MinHeight="48" MinWidth="251"
+        Title="Decryptor" Width="335" IsTabStop="True" 
+        WindowStyle="None" AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip" UseLayoutRounding="True"
+        WindowStartupLocation="CenterScreen" Closing="OnWindowClosing" >
+    <Window.Resources>
+        <Style x:Key="BlueLabel" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="{DynamicResource morvarid}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Top"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="{DynamicResource Background}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid MouseDown="ResizePressed" Grid.Column="0" Background="{DynamicResource LightBackground}" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" FlowDirection="RightToLeft">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal"  >
+                <Button x:Name="CloseButton" Style="{DynamicResource btn-danger}" Margin="3,5,3,5" BorderThickness="0" Click="ClosePressed" >
+                    x
+                </Button>
+                <Button x:Name="MinimizeButton" Content="-" Style="{DynamicResource btn-info}" Margin="3,5,3,5" BorderThickness="0" Click="MinimizePressed"/>
+            </StackPanel>
+            <TextBlock  x:Name="WindowTitle" Margin="4,0,10,0" Width="{Binding Path=ActualWidth,RelativeSource={RelativeSource AncestorType=Window}}" Text="Decryptor" FlowDirection="RightToLeft" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource CloseButtonBackgroundHighlighted}" FontSize="16" FontWeight="Bold" Grid.Column="1" UseLayoutRounding="False"/>
+        </Grid>
+
+        <!-- Main Grid -->
+        <Grid Grid.Row="1" x:Name="MainGrid" Background="{DynamicResource BackgroundNormal}" Grid.RowSpan="3" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <!--Pass input-->
+            <DockPanel Grid.Row="0">
+                <WrapPanel VerticalAlignment="Center">
+                    <Label Content="Password:" Width="83" FontSize="16" Style="{DynamicResource BlueLabel}" FontFamily="Tahoma"/>
+
+                    <PasswordBox x:Name="PasswordBox" Width="125" Margin="10,4" HorizontalAlignment="Center"
+                                 BorderThickness="1" Background="{DynamicResource TextBoxBackground}"
+                                 Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+                                 SelectionBrush="{DynamicResource TextBoxBackgroundSelected}" BorderBrush="{DynamicResource TextBoxBorderBrush}" PasswordChar="*" FontWeight="Bold" FontSize="13.333" />
+                </WrapPanel>
+                <Button  x:Name="ShowZipFileButton" DockPanel.Dock="Right" 
+                         HorizontalAlignment="Right" Margin="5"
+                         Content="Show" Style="{DynamicResource btn-success}" 
+                         BorderThickness="0" Visibility="Hidden" 
+                         IsVisibleChanged="ShowButtonVisibiliy" Click="ShowListClicked" FontFamily="Tahoma"/>
+            </DockPanel>
+
+            <!-- Saving Path + Check All -->
+            <Grid Grid.Row="1" FlowDirection="LeftToRight" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="96"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <WrapPanel Grid.Column="0"  >
+                    <CheckBox x:Name="SelectAllCheckBox" 
+                              VerticalAlignment="Center" 
+                              HorizontalAlignment="Center" Click="SelectAllClicked" />
+
+                    <Label Content="Select All"
+                           Style="{StaticResource BlueLabel}" Width="59" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                </WrapPanel>
+
+                <Label  Style="{StaticResource BlueLabel}" Content="Path to Save"
+                        Grid.Column="1" Foreground="{DynamicResource GrayBrush10}" 
+                         Background="Transparent" Width="80" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Tahoma" Margin="0,3" />
+                <TextBox x:Name="AdressTextBox"  
+                         Margin="80,6" Style="{StaticResource SearchTextBox}"
+                         Grid.Column="1" 
+                         SelectionBrush="{DynamicResource TextBoxBackgroundSelected}" 
+                         BorderBrush="{DynamicResource Background}" 
+                         Background="{DynamicResource TextBoxBackground}" 
+                         LostFocus="AdressTextboxLostFocus" VerticalAlignment="Center" />
+
+                <Button x:Name="PathSearchButton" 
+                        Margin="0,0,10,0"
+                        Content="Search..." Grid.Column="1" 
+                        Width="46" Style="{DynamicResource StandardButton}" 
+                        Background="{DynamicResource BackgroundHighlighted}" 
+                        Click="PathSearchClicked" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="1,1,10,1" RenderTransformOrigin="0.261,0.5" UseLayoutRounding="False" />
+            </Grid>
+
+
+            <DataGrid x:Name="dataGrid" Grid.Row="2" SelectionChanged="dataGrid_SelectionChanged"
+                      Style="{DynamicResource StandardDataGrid}" SelectionUnit="FullRow" IsSynchronizedWithCurrentItem="True" BorderThickness="2" Focusable="False" RowDetailsVisibilityMode="Visible" FlowDirection="LeftToRight" IsReadOnly="True"/>
+
+            <Button x:Name="SaveButton" Grid.Row="3" Style="{DynamicResource btn-primary}"
+                    Content="Save" Click="SaveClicked" IsEnabled="False" LayoutUpdated="SaveButtonLayoutUpdated">
+            </Button>
+
+            <StackPanel Grid.Row="4">
+                <TextBlock Text="Welcome!" 
+                           x:Name="StatusBlock" 
+                           Height="20" 
+                           Foreground="{DynamicResource GrayBrush10}" 
+                           FlowDirection="LeftToRight" 
+                           Background="{DynamicResource BackgroundNormal}"
+                           FontFamily="{DynamicResource morvarid}" Margin="2,2,8,2" />
+                <ProgressBar x:Name="ProgressBar" Height="20" Background="{DynamicResource BackgroundNormal}" BorderBrush="{DynamicResource BorderBrushNormal}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" FlowDirection="LeftToRight" Margin="1" Foreground="{DynamicResource BrandingBrush}" IsEnabled="False"/>
+            </StackPanel>
+        </Grid>
+        <!-- End of Main Grid-->
+    </Grid>
+</Window>

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HessamSFX", "HessamSFX", "{1D7277E7-7767-4A91-9C40-77C9DE7B1191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Encryptor", "Encryptor\Encryptor.csproj", "{CFC2F52C-FF21-4406-BB59-6671E6040CBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decryptor", "Decryptor\Decryptor.csproj", "{F1B43214-8EE2-4B6B-BC0F-0243B7F38EE8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFC2F52C-FF21-4406-BB59-6671E6040CBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC2F52C-FF21-4406-BB59-6671E6040CBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC2F52C-FF21-4406-BB59-6671E6040CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC2F52C-FF21-4406-BB59-6671E6040CBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1B43214-8EE2-4B6B-BC0F-0243B7F38EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1B43214-8EE2-4B6B-BC0F-0243B7F38EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1B43214-8EE2-4B6B-BC0F-0243B7F38EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1B43214-8EE2-4B6B-BC0F-0243B7F38EE8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CFC2F52C-FF21-4406-BB59-6671E6040CBF} = {1D7277E7-7767-4A91-9C40-77C9DE7B1191}
+		{F1B43214-8EE2-4B6B-BC0F-0243B7F38EE8} = {1D7277E7-7767-4A91-9C40-77C9DE7B1191}
+	EndGlobalSection
+EndGlobal
